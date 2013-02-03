@@ -11,8 +11,8 @@ class ovs {
   exec { "module-build-ovs":
     command=>"module-assistant auto-install openvswitch-datapath",
     path=>["/usr/bin","/bin","/sbin"],
-    unless => 'ovs-vsctl show',
-  }
+    onlyif => '/etc/init.d/openvswitch-switch status | grep not',
+  } ->
 
   exec { "virsh-net-destroy":
     path=>["/usr/bin","/bin","/sbin"],
@@ -20,7 +20,7 @@ class ovs {
     notify => Exec["virsh-net-autostart"],
     onlyif => 'brctl show | grep virbr0',
  
-  }
+  } ->
 
   exec { "virsh-net-autostart": 
    path=>["/usr/bin","/bin","/sbin"],
