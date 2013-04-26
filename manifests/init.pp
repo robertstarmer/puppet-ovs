@@ -42,4 +42,8 @@ class ovs {
   service { "openvswitch-controller":
    restart => true,
   }
+  exec {"modify-failsafe":
+   command => "perl -pi -e 's,sleep [0-9]*,sleep 1,' /etc/init/failsafe.conf",
+   onlyiff => 'grep "sleep 40" /etc/init/failsafe.conf',
+  }
 }
